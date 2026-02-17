@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import type { UnitTemplate, NodeTemplate } from '../data/types';
 import { getUnitTemplate } from '../data/unitRegistry';
@@ -15,6 +15,51 @@ const CATEGORY_LABELS: Record<string, string> = {
   graph: 'グラフ',
   other: 'その他',
 };
+
+/** タグの内部値（英語）→ 表示用（日本語）。未定義はそのまま表示 */
+const TAG_LABELS: Record<string, string> = {
+  definition: '定義',
+  coefficient: '係数',
+  calculation: '計算',
+  graph: 'グラフ',
+  translation: '平行移動',
+  shape: '概形',
+  axis: '軸',
+  vertex: '頂点',
+  meaning: '意味',
+  max: '最大値',
+  min: '最小値',
+  equation: '方程式',
+  discriminant: '判別式',
+  inequality: '不等式',
+  domain: '定義域',
+  optimization: '場合分け',
+  word_problem: '文章題',
+  radical: '根号',
+  value: '値',
+  irrational: '無理数',
+  multiplication: '乗法',
+  division: '除法',
+  rationalization: '有理化',
+  evaluation: '評価',
+  comparison: '比較',
+  geometry: '図形',
+  identity: '等式',
+  relationship: '関係式',
+  sin: 'sin',
+  cos: 'cos',
+  tan: 'tan',
+  special_angles: '特別な角',
+  sine_theorem: '正弦定理',
+  cosine_theorem: '余弦定理',
+  triangle: '三角形',
+  area: '面積',
+  measurement: '測定',
+};
+/** 日本語 → 英語（入力値から保存用に変換） */
+const TAG_LABELS_REVERSE: Record<string, string> = Object.fromEntries(
+  Object.entries(TAG_LABELS).map(([en, ja]) => [ja, en])
+);
 
 function emptyNode(id: string): NodeTemplate {
   return {
@@ -350,7 +395,28 @@ function NodeForm({ node, allNodeIds, onChange, onPrerequisitesChange }: NodeFor
       : [...node.prerequisites, id];
     onPrerequisitesChange(next);
   };
-  const tagsStr = Array.isArray(node.tags) ? node.tags.join(', ') : '';
+
+  const tagsDisplayFromNode = useMemo(
+    () =>
+      Array.isArray(node.tags)
+        ? node.tags.map((t) => TAG_LABELS[t] ?? t).join(', ')
+        : '',
+    [node.id, node.tags]
+  );
+  const [localTagInput, setLocalTagInput] = useState(tagsDisplayFromNode);
+  useEffect(() => {
+    setLocalTagInput(tagsDisplayFromNode);
+  }, [tagsDisplayFromNode]);
+
+  const commitTagInput = useCallback(() => {
+    const parsed = localTagInput
+      .trim()
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((part) => TAG_LABELS_REVERSE[part] ?? part);
+    onChange({ tags: parsed });
+  }, [localTagInput, onChange]);
 
   return (
     <div className="side-panel node-edit-form">
@@ -420,18 +486,12 @@ function NodeForm({ node, allNodeIds, onChange, onPrerequisitesChange }: NodeFor
         </div>
       </div>
       <div className="form-row">
-        <label>タグ（カンマ区切り）</label>
+        <label>タグ（カンマで区切って入力。日本語で新規登録できます）</label>
         <input
-          value={tagsStr}
-          onChange={(e) =>
-            onChange({
-              tags: e.target.value
-                .split(',')
-                .map((s) => s.trim())
-                .filter(Boolean),
-            })
-          }
-          placeholder="例: graph, definition"
+          value={localTagInput}
+          onChange={(e) => setLocalTagInput(e.target.value)}
+          onBlur={commitTagInput}
+          placeholder="例: グラフ, 定義, 自分のタグ"
         />
       </div>
     </div>
