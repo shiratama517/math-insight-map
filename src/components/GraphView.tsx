@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -18,20 +18,62 @@ interface GraphViewProps {
   flowNodes: Node[];
   flowEdges: Edge[];
   onNodeSelect: (node: NodeTemplate | null) => void;
+  /** クリックで選択中のノードID。詳細表示中はこのノードに接続する辺の強調を維持する。 */
+  selectedNodeId?: string | null;
 }
 
 export function GraphView({
   flowNodes,
   flowEdges,
   onNodeSelect,
+  selectedNodeId = null,
 }: GraphViewProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(flowEdges);
+  const [highlightedNodeId, setHighlightedNodeId] = useState<string | null>(null);
+
+  /** ホバー優先、未ホバー時は選択中ノードで辺を強調する。 */
+  const effectiveHighlightId = highlightedNodeId ?? selectedNodeId ?? null;
 
   useEffect(() => {
     setNodes(flowNodes);
     setEdges(flowEdges);
   }, [flowNodes, flowEdges, setNodes, setEdges]);
+
+  /**
+   * ホバー中または選択中のノードに接続している辺を強調する。
+   * 接続辺は太く・アニメーション、他は薄くする。
+   */
+  useEffect(() => {
+    if (!effectiveHighlightId) {
+      setEdges((prev) =>
+        prev.map((e) => ({ ...e, style: undefined, animated: false }))
+      );
+      return;
+    }
+    const hid = String(effectiveHighlightId);
+    setEdges((prev) =>
+      prev.map((e) => {
+        const connected =
+          String(e.source) === hid || String(e.target) === hid;
+        return {
+          ...e,
+          style: connected
+            ? { stroke: '#0d6efd', strokeWidth: 3 }
+            : { opacity: 0.2 },
+          animated: connected,
+        };
+      })
+    );
+  }, [effectiveHighlightId, setEdges]);
+
+  const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
+    setHighlightedNodeId(node.id);
+  }, []);
+
+  const onNodeMouseLeave = useCallback(() => {
+    setHighlightedNodeId(null);
+  }, []);
 
   const onNodesChangeHandler: OnNodesChange = useCallback(
     (changes) => {
@@ -75,6 +117,8 @@ export function GraphView({
         onNodesChange={onNodesChangeHandler}
         onEdgesChange={onEdgesChangeHandler}
         onNodeClick={onNodeClick}
+        onNodeMouseEnter={onNodeMouseEnter}
+        onNodeMouseLeave={onNodeMouseLeave}
         onPaneClick={onPaneClick}
         fitView
       >

@@ -226,6 +226,7 @@ export function StudentDetailPage() {
             flowNodes={flowNodes}
             flowEdges={flowEdges}
             onNodeSelect={setSelectedNode}
+            selectedNodeId={selectedNode?.id ?? null}
           />
         </div>
         <aside className="panel-area">
