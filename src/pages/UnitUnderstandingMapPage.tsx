@@ -22,11 +22,10 @@ import {
 import { loadStudent } from '../lib/storage';
 import { computeUnitUnderstanding } from '../utils/unitUnderstanding';
 import { levelToColor } from '../utils/colorMapper';
+import { getLayoutedElements } from '../utils/dagreLayout';
 
 const NODE_WIDTH = 180;
 const NODE_HEIGHT = 56;
-const PAD_X = 24;
-const PAD_Y = 20;
 
 function buildUnitFlowGraph(
   grouped: { subject_name: string; units: UnitMeta[] }[],
@@ -34,9 +33,7 @@ function buildUnitFlowGraph(
 ): { nodes: Node[]; edges: Edge[] } {
   const nodes: Node[] = [];
 
-  let y = 0;
   for (const group of grouped) {
-    let x = 0;
     for (const u of group.units) {
       const understanding = getUnderstanding(u.unit_id);
       const average = understanding?.average ?? 0;
@@ -46,7 +43,7 @@ function buildUnitFlowGraph(
       nodes.push({
         id: u.unit_id,
         type: 'default',
-        position: { x, y },
+        position: { x: 0, y: 0 },
         data: {
           label: `${u.unit_name}（達成率 ${achievementPercent}%）`,
         },
@@ -60,9 +57,7 @@ function buildUnitFlowGraph(
           fontSize: 12,
         },
       });
-      x += NODE_WIDTH + PAD_X;
     }
-    y += NODE_HEIGHT + PAD_Y;
   }
 
   const edges: Edge[] = [];
@@ -137,10 +132,10 @@ export function UnitUnderstandingMapPage() {
     [unitUnderstandingMap]
   );
 
-  const { nodes: flowNodes, edges: flowEdges } = useMemo(
-    () => buildUnitFlowGraph(grouped, getUnderstanding),
-    [grouped, getUnderstanding]
-  );
+  const { nodes: flowNodes, edges: flowEdges } = useMemo(() => {
+    const { nodes: rawNodes, edges: rawEdges } = buildUnitFlowGraph(grouped, getUnderstanding);
+    return getLayoutedElements(rawNodes, rawEdges, NODE_WIDTH, NODE_HEIGHT, 'LR');
+  }, [grouped, getUnderstanding]);
 
   const [highlightedNodeId, setHighlightedNodeId] = useState<string | null>(null);
 
