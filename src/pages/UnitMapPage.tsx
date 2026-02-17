@@ -36,6 +36,13 @@ export function UnitMapPage() {
         <p className="section-desc" style={{ marginBottom: '1rem' }}>
           科目ごとの単元一覧です。生徒を選んでから単元をクリックすると、その単元の理解地図を開きます。
         </p>
+        {hasStudent && (
+          <p style={{ marginBottom: '1rem' }}>
+            <Link to={`/unit-map/understanding?student=${selectedStudentId}`} className="btn-link">
+              単元ごとの理解度マップ
+            </Link>
+          </p>
+        )}
         <div className="unit-map-student" style={{ marginBottom: '1.5rem' }}>
           <label htmlFor="unit-map-student-select">生徒を選択</label>
           <select

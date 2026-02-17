@@ -1,0 +1,8 @@
+{
+  "various_expressions": ["number_and_expression"],
+  "differential_integral": ["quadratic_function"],
+  "trigonometry": ["trigonometric_ratio"],
+  "limit": ["differential_integral"],
+  "differential_method": ["limit"],
+  "integral_method": ["limit"]
+}

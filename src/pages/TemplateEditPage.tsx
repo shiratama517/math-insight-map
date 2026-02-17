@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import type { UnitTemplate, NodeTemplate } from '../data/types';
-import { getUnitTemplate } from '../data/unitRegistry';
+import { getUnitTemplate, getAvailableUnitsGroupedBySubject } from '../data/unitRegistry';
 import { loadCustomTemplate, saveCustomTemplate } from '../lib/templateStorage';
 
 const CATEGORIES = ['definition', 'interpretation', 'operation', 'application', 'graph', 'other'];
@@ -81,6 +81,51 @@ function createDefaultUnit(): UnitTemplate {
     description: '',
     nodes: [emptyNode('N-01')],
   };
+}
+
+function PrerequisiteUnitsSelect({
+  currentUnitId,
+  selectedIds,
+  onChange,
+}: {
+  currentUnitId: string;
+  selectedIds: string[];
+  onChange: (ids: string[]) => void;
+}) {
+  const grouped = getAvailableUnitsGroupedBySubject();
+  const toggle = (unitId: string, checked: boolean) => {
+    if (checked) {
+      onChange([...selectedIds, unitId]);
+    } else {
+      onChange(selectedIds.filter((id) => id !== unitId));
+    }
+  };
+  return (
+    <div className="prerequisite-units-select" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {grouped.map((group) => (
+        <div key={group.subject_name}>
+          <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{group.subject_name}</span>
+          <ul style={{ listStyle: 'none', paddingLeft: '1rem', margin: '0.25rem 0 0' }}>
+            {group.units
+              .filter((u) => u.unit_id !== currentUnitId)
+              .map((u) => (
+                <li key={u.unit_id} style={{ marginBottom: '0.25rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(u.unit_id)}
+                      onChange={(e) => toggle(u.unit_id, e.target.checked)}
+                      aria-label={`${u.unit_name}を前提にする`}
+                    />
+                    <span>{u.unit_name}</span>
+                  </label>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export function TemplateEditPage() {
@@ -311,6 +356,19 @@ export function TemplateEditPage() {
               rows={2}
             />
           </div>
+          {(isNew || loadCustomTemplate(unit.unit_id) !== null) && (
+            <div className="form-row">
+              <label>前提単元（理解度マップの矢印）</label>
+              <p className="form-hint" style={{ fontSize: '0.85rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>
+                この単元の前提とする単元を選ぶと、単元ごとの理解度マップで矢印が表示されます。
+              </p>
+              <PrerequisiteUnitsSelect
+                currentUnitId={unit.unit_id}
+                selectedIds={unit.prerequisite_unit_ids ?? []}
+                onChange={(ids) => updateUnit((prev) => ({ ...prev, prerequisite_unit_ids: ids }))}
+              />
+            </div>
+          )}
         </section>
 
         <section className="template-nodes-section">

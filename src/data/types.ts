@@ -17,6 +17,8 @@ export interface UnitTemplate {
   grade: string;
   description: string;
   nodes: NodeTemplate[];
+  /** 単元理解度マップ用。この単元の前提となる単元ID（カスタム単元でユーザー定義） */
+  prerequisite_unit_ids?: string[];
 }
 
 export interface StudentNodeStatus {

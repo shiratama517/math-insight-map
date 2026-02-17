@@ -1,6 +1,7 @@
 import type { UnitTemplate } from './types';
 import { loadCustomTemplate } from '../lib/templateStorage';
 import curriculumUnits from './curriculum_units.json';
+import unitPrerequisitesData from './unit_prerequisites.json';
 
 export interface UnitMeta {
   unit_id: string;
@@ -79,6 +80,14 @@ export function getAvailableUnits(): UnitMeta[] {
   const all = [...builtInEnriched, ...customEnriched];
   all.sort((a, b) => (a.subject_order ?? 999) - (b.subject_order ?? 999) || (a.unit_order ?? 0) - (b.unit_order ?? 0));
   return all;
+}
+
+/** 単元の前提となる単元ID一覧。組み込みは unit_prerequisites.json、カスタムはテンプレートの prerequisite_unit_ids から取得 */
+export function getUnitPrerequisites(unitId: string): string[] {
+  const custom = loadCustomTemplate(unitId);
+  if (custom?.prerequisite_unit_ids) return custom.prerequisite_unit_ids;
+  const builtIn = unitPrerequisitesData as Record<string, string[]>;
+  return builtIn[unitId] ?? [];
 }
 
 /** 科目ごとにグループ化した単元一覧（単元選択の optgroup 等に利用） */

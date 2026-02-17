@@ -23,7 +23,9 @@ function isValidUnitTemplate(t: unknown): t is UnitTemplate {
     typeof o.unit_name === 'string' &&
     Array.isArray(o.nodes) &&
     (o.grade === undefined || typeof o.grade === 'string') &&
-    (o.description === undefined || typeof o.description === 'string')
+    (o.description === undefined || typeof o.description === 'string') &&
+    (o.prerequisite_unit_ids === undefined ||
+      (Array.isArray(o.prerequisite_unit_ids) && (o.prerequisite_unit_ids as unknown[]).every((id) => typeof id === 'string')))
   );
 }
 
