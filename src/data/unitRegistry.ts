@@ -26,6 +26,23 @@ const BUILT_IN_UNITS: UnitMeta[] = [
   { unit_id: 'trigonometric_ratio', unit_name: '三角比', grade: '高校1年' },
   { unit_id: 'number_and_expression', unit_name: '数と式', grade: '高校1年' },
   { unit_id: 'data_analysis', unit_name: 'データの分析', grade: '高校1年' },
+  { unit_id: 'various_expressions', unit_name: 'いろいろな式', grade: '高校2年' },
+  { unit_id: 'figures_and_equations', unit_name: '図形と方程式', grade: '高校2年' },
+  { unit_id: 'exp_log_function', unit_name: '指数関数・対数関数', grade: '高校2年' },
+  { unit_id: 'trigonometry', unit_name: '三角関数', grade: '高校2年' },
+  { unit_id: 'differential_integral', unit_name: '微分・積分の考え', grade: '高校2年' },
+  { unit_id: 'limit', unit_name: '極限', grade: '高校3年' },
+  { unit_id: 'differential_method', unit_name: '微分法', grade: '高校3年' },
+  { unit_id: 'integral_method', unit_name: '積分法', grade: '高校3年' },
+  { unit_id: 'figure_properties', unit_name: '図形の性質', grade: '高校1年' },
+  { unit_id: 'combinatorics_and_probability', unit_name: '場合の数と確率', grade: '高校1年' },
+  { unit_id: 'math_and_human_activity', unit_name: '数学と人間の活動', grade: '高校1年' },
+  { unit_id: 'sequence', unit_name: '数列', grade: '高校2年' },
+  { unit_id: 'statistical_inference', unit_name: '統計的な推測', grade: '高校2年' },
+  { unit_id: 'math_and_social_life', unit_name: '数学と社会生活', grade: '高校2年' },
+  { unit_id: 'vector', unit_name: 'ベクトル', grade: '高校2年' },
+  { unit_id: 'curves_and_complex_plane', unit_name: '平面上の曲線と複素数平面', grade: '高校2年' },
+  { unit_id: 'mathematical_expression', unit_name: '数学的な表現の工夫', grade: '高校2年' },
 ];
 
 /** curriculum_units から unit_id に対する科目・順序のマップを生成 */
@@ -118,6 +135,40 @@ async function getBuiltInTemplate(unitId: string): Promise<UnitTemplate> {
       return (await import('./templates/number_and_expression.json')).default as UnitTemplate;
     case 'data_analysis':
       return (await import('./templates/data_analysis.json')).default as UnitTemplate;
+    case 'various_expressions':
+      return (await import('./templates/various_expressions.json')).default as UnitTemplate;
+    case 'figures_and_equations':
+      return (await import('./templates/figures_and_equations.json')).default as UnitTemplate;
+    case 'exp_log_function':
+      return (await import('./templates/exp_log_function.json')).default as UnitTemplate;
+    case 'trigonometry':
+      return (await import('./templates/trigonometry.json')).default as UnitTemplate;
+    case 'differential_integral':
+      return (await import('./templates/differential_integral.json')).default as UnitTemplate;
+    case 'limit':
+      return (await import('./templates/limit.json')).default as UnitTemplate;
+    case 'differential_method':
+      return (await import('./templates/differential_method.json')).default as UnitTemplate;
+    case 'integral_method':
+      return (await import('./templates/integral_method.json')).default as UnitTemplate;
+    case 'figure_properties':
+      return (await import('./templates/figure_properties.json')).default as UnitTemplate;
+    case 'combinatorics_and_probability':
+      return (await import('./templates/combinatorics_and_probability.json')).default as UnitTemplate;
+    case 'math_and_human_activity':
+      return (await import('./templates/math_and_human_activity.json')).default as UnitTemplate;
+    case 'sequence':
+      return (await import('./templates/sequence.json')).default as UnitTemplate;
+    case 'statistical_inference':
+      return (await import('./templates/statistical_inference.json')).default as UnitTemplate;
+    case 'math_and_social_life':
+      return (await import('./templates/math_and_social_life.json')).default as UnitTemplate;
+    case 'vector':
+      return (await import('./templates/vector.json')).default as UnitTemplate;
+    case 'curves_and_complex_plane':
+      return (await import('./templates/curves_and_complex_plane.json')).default as UnitTemplate;
+    case 'mathematical_expression':
+      return (await import('./templates/mathematical_expression.json')).default as UnitTemplate;
     default:
       throw new Error(`Unknown unit: ${unitId}`);
   }

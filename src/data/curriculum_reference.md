@@ -309,14 +309,29 @@
 
 ---
 
-## 組み込みテンプレートとの対応（現状）
+## 組み込みテンプレートとの対応
 
 | 指導要領の単元     | 組み込み unit_id        | 備考 |
 |--------------------|-------------------------|------|
-| 数学Ⅰ（3）二次関数 | quadratic_function      | 実装済み |
-| 数学Ⅰ（2）図形と計量（三角比） | trigonometric_ratio | 実装済み |
-| 中学3年 平方根     | square_root             | 実装済み（高校ではない） |
+| 中学3年 平方根     | square_root             | 高校ではない |
 | 数学Ⅰ（1）数と式   | number_and_expression   | 実装済み |
+| 数学Ⅰ（2）図形と計量（三角比） | trigonometric_ratio | 実装済み |
+| 数学Ⅰ（3）二次関数 | quadratic_function      | 実装済み |
 | 数学Ⅰ（4）データの分析 | data_analysis       | 実装済み |
-
-上記以外の単元は、この参照に基づいて `src/data/templates/*.json` と `unitRegistry.ts` に順次追加できる。
+| 数学Ⅱ（1）いろいろな式 | various_expressions  | 実装済み |
+| 数学Ⅱ（2）図形と方程式 | figures_and_equations | 実装済み |
+| 数学Ⅱ（3）指数関数・対数関数 | exp_log_function   | 実装済み |
+| 数学Ⅱ（4）三角関数 | trigonometry            | 実装済み |
+| 数学Ⅱ（5）微分・積分の考え | differential_integral | 実装済み |
+| 数学Ⅲ（1）極限     | limit                   | 実装済み |
+| 数学Ⅲ（2）微分法   | differential_method     | 実装済み |
+| 数学Ⅲ（3）積分法   | integral_method         | 実装済み |
+| 数学A（1）図形の性質 | figure_properties     | 実装済み |
+| 数学A（2）場合の数と確率 | combinatorics_and_probability | 実装済み |
+| 数学A（3）数学と人間の活動 | math_and_human_activity | 実装済み |
+| 数学B（1）数列     | sequence                 | 実装済み |
+| 数学B（2）統計的な推測 | statistical_inference | 実装済み |
+| 数学B（3）数学と社会生活 | math_and_social_life  | 実装済み |
+| 数学C（1）ベクトル | vector                   | 実装済み |
+| 数学C（2）平面上の曲線と複素数平面 | curves_and_complex_plane | 実装済み |
+| 数学C（3）数学的な表現の工夫 | mathematical_expression | 実装済み |
