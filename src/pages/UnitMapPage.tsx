@@ -36,21 +36,14 @@ export function UnitMapPage() {
         <p className="section-desc" style={{ marginBottom: '1rem' }}>
           科目ごとの単元一覧です。生徒を選んでから単元をクリックすると、その単元の理解地図を開きます。
         </p>
-        {hasStudent && (
-          <p style={{ marginBottom: '1rem' }}>
-            <Link to={`/unit-map/understanding?student=${selectedStudentId}`} className="btn-link">
-              単元ごとの理解度マップ
-            </Link>
-          </p>
-        )}
-        <div className="unit-map-student" style={{ marginBottom: '1.5rem' }}>
+        <div className="unit-map-student" style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
           <label htmlFor="unit-map-student-select">生徒を選択</label>
           <select
             id="unit-map-student-select"
             value={selectedStudentId}
             onChange={(e) => setSelectedStudentId(e.target.value)}
             aria-label="生徒を選択"
-            style={{ marginLeft: '0.5rem', padding: '0.25rem 0.5rem' }}
+            style={{ padding: '0.25rem 0.5rem' }}
           >
             <option value="">— 選択してください —</option>
             {students.map((s) => (
@@ -59,6 +52,11 @@ export function UnitMapPage() {
               </option>
             ))}
           </select>
+          {hasStudent && (
+            <Link to={`/unit-map/understanding?student=${selectedStudentId}`} className="btn-link" style={{ marginLeft: 'auto' }}>
+              単元ごとの理解度マップ
+            </Link>
+          )}
         </div>
         {!hasStudent && selectedStudentId && (
           <p className="unit-map-message" style={{ color: 'var(--muted)', marginBottom: '1rem' }}>
