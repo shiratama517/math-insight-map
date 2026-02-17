@@ -6,6 +6,16 @@ import { loadCustomTemplate, saveCustomTemplate } from '../lib/templateStorage';
 
 const CATEGORIES = ['definition', 'interpretation', 'operation', 'application', 'graph', 'other'];
 
+/** カテゴリの内部値（英語）→ 表示用（日本語） */
+const CATEGORY_LABELS: Record<string, string> = {
+  definition: '定義',
+  interpretation: '解釈・意味',
+  operation: '計算・操作',
+  application: '応用',
+  graph: 'グラフ',
+  other: 'その他',
+};
+
 function emptyNode(id: string): NodeTemplate {
   return {
     id,
@@ -377,7 +387,7 @@ function NodeForm({ node, allNodeIds, onChange, onPrerequisitesChange }: NodeFor
           onChange={(e) => onChange({ category: e.target.value })}
         >
           {CATEGORIES.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>{CATEGORY_LABELS[c] ?? c}</option>
           ))}
         </select>
       </div>
