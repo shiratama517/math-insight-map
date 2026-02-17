@@ -6,14 +6,14 @@ const STORAGE_KEY_STUDENT_IDS = 'math-insight-map-student-ids';
 /** 配布時に残すデモ生徒のID */
 export const DEMO_STUDENT_ID = 'student-demo';
 
-/** 登録されている生徒ID一覧を取得。未設定の場合は従来のデモ生徒1件でマイグレーション */
+/** 登録されている生徒ID一覧を取得。未設定時はデモ1件でマイグレーション。明示的に空にした場合は [] */
 export function loadStudentIds(): string[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_STUDENT_IDS);
     if (!raw) return ['student-demo'];
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.every((x) => typeof x === 'string')) {
-      return parsed.length > 0 ? parsed : ['student-demo'];
+      return parsed;
     }
     return ['student-demo'];
   } catch {
@@ -133,7 +133,7 @@ export function ensureUnitStatus(
 const TODAY = () => new Date().toISOString().slice(0, 10);
 
 /**
- * 全生徒の理解度・確認日・メモを初期化する（配布用）。
+ * 全生徒の理解度・確認日・メモを初期化する。
  * 生徒一覧や単元構成はそのまま、各ノードの understanding_level / last_checked / memo のみリセットする。
  * @returns 初期化した生徒数
  */
@@ -167,17 +167,14 @@ export function resetAllUnderstanding(): number {
 }
 
 /**
- * デモ生徒以外の生徒をストレージから削除し、生徒ID一覧をデモのみにする（配布用）。
+ * すべての生徒データをストレージから削除する（デモ生徒を含む）。生徒ID一覧を空にする。
  * @returns 削除した生徒数
  */
-export function removeStudentsExceptDemo(): number {
+export function clearAllStudentData(): number {
   const ids = loadStudentIds();
-  let removed = 0;
   for (const id of ids) {
-    if (id === DEMO_STUDENT_ID) continue;
     localStorage.removeItem(STORAGE_KEY_PREFIX + id);
-    removed += 1;
   }
-  saveStudentIds([DEMO_STUDENT_ID]);
-  return removed;
+  saveStudentIds([]);
+  return ids.length;
 }

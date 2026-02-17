@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loadStudentIds, loadStudent, addStudent, saveStudent, resetAllUnderstanding, removeStudentsExceptDemo, DEMO_STUDENT_ID } from '../lib/storage';
+import { loadStudentIds, saveStudentIds, loadStudent, addStudent, saveStudent, createInitialStudent, clearAllStudentData, DEMO_STUDENT_ID } from '../lib/storage';
 import { clearAllCustomTemplates } from '../lib/templateStorage';
-import { getUnitTemplate, getBuiltInUnitIds } from '../data/unitRegistry';
+import { getUnitTemplate } from '../data/unitRegistry';
 
 const DEFAULT_UNIT_ID = 'quadratic_function';
+const DEMO_STUDENT_NAME = 'デモ生徒';
 
 export function StudentListPage() {
   const navigate = useNavigate();
@@ -12,6 +13,19 @@ export function StudentListPage() {
   const [newName, setNewName] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [resetMessage, setResetMessage] = useState<string | null>(null);
+
+  // 配布・初回起動時: デモ生徒のIDはあるがデータがない場合に自動作成する
+  useEffect(() => {
+    if (!studentIds.includes(DEMO_STUDENT_ID)) return;
+    if (loadStudent(DEMO_STUDENT_ID) != null) return;
+    getUnitTemplate(DEFAULT_UNIT_ID).then((unit) => {
+      const nodeIds = unit.nodes.map((n) => n.id);
+      const demo = createInitialStudent(DEMO_STUDENT_ID, DEMO_STUDENT_NAME, DEFAULT_UNIT_ID, nodeIds);
+      saveStudent(demo);
+      saveStudentIds([DEMO_STUDENT_ID]);
+      setStudentIds(loadStudentIds());
+    });
+  }, [studentIds]);
 
   const students = useMemo(() => {
     const rows: Array<{ id: string; name: string; grade?: string }> = [];
@@ -23,25 +37,14 @@ export function StudentListPage() {
   }, [studentIds]);
 
   const handleResetUnderstanding = () => {
-    if (!window.confirm('全生徒の理解度を初期化し、デモ生徒以外の生徒とカスタム単元を削除します。配布用にクリーンな状態になります。よろしいですか？')) return;
-    resetAllUnderstanding();
-    const removed = removeStudentsExceptDemo();
+    if (!window.confirm('デモ生徒を含むすべての生徒データとカスタム単元を削除します。ブラウザに保存されているこのアプリのデータがクリアされます。よろしいですか？')) return;
+    const studentsRemoved = clearAllStudentData();
     const customRemoved = clearAllCustomTemplates();
-    // デモ生徒の進捗から削除したカスタム単元を除去
-    const builtInIds = new Set(getBuiltInUnitIds());
-    const demo = loadStudent(DEMO_STUDENT_ID);
-    if (demo?.nodeStatusByUnit) {
-      const filtered: typeof demo.nodeStatusByUnit = {};
-      for (const [unitId, status] of Object.entries(demo.nodeStatusByUnit)) {
-        if (builtInIds.has(unitId)) filtered[unitId] = status;
-      }
-      saveStudent({ ...demo, nodeStatusByUnit: filtered });
-    }
     setStudentIds(loadStudentIds());
-    const parts: string[] = ['理解度を初期化しました。'];
-    if (removed > 0) parts.push(`デモ生徒以外 ${removed} 名を削除`);
+    const parts: string[] = [];
+    if (studentsRemoved > 0) parts.push(`生徒データ ${studentsRemoved} 件を削除`);
     if (customRemoved > 0) parts.push(`カスタム単元 ${customRemoved} 件を削除`);
-    setResetMessage(parts.join('。'));
+    setResetMessage(parts.length > 0 ? parts.join('。') : 'データを削除しました。');
     setTimeout(() => setResetMessage(null), 5000);
   };
 
@@ -76,9 +79,9 @@ export function StudentListPage() {
             type="button"
             className="btn-reset-understanding"
             onClick={handleResetUnderstanding}
-            title="配布前に全生徒の理解度を未学習に戻します"
+            title="ブラウザに保存された生徒・カスタム単元をすべて削除します"
           >
-            理解度を初期化（配布用）
+            データをすべて削除
           </button>
           {resetMessage && <span className="reset-message" role="status">{resetMessage}</span>}
         </div>
