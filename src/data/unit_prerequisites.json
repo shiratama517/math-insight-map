@@ -1,8 +1,16 @@
 {
   "various_expressions": ["number_and_expression"],
-  "differential_integral": ["quadratic_function"],
+  "figures_and_equations": ["number_and_expression", "quadratic_function"],
+  "exp_log_function": ["number_and_expression"],
   "trigonometry": ["trigonometric_ratio"],
+  "differential_integral": ["quadratic_function"],
   "limit": ["differential_integral"],
   "differential_method": ["limit"],
-  "integral_method": ["limit"]
+  "integral_method": ["limit", "differential_method"],
+  "sequence": ["number_and_expression"],
+  "statistical_inference": ["data_analysis", "combinatorics_and_probability"],
+  "math_and_social_life": ["data_analysis", "sequence"],
+  "vector": ["number_and_expression", "figures_and_equations"],
+  "curves_and_complex_plane": ["various_expressions", "trigonometry", "figures_and_equations"],
+  "mathematical_expression": ["data_analysis"]
 }
