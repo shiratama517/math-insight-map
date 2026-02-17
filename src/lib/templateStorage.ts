@@ -50,3 +50,11 @@ export function deleteCustomTemplate(unitId: string): void {
   const next = loadCustomTemplates().filter((t) => t.unit_id !== unitId);
   localStorage.setItem(STORAGE_KEY_CUSTOM_TEMPLATES, JSON.stringify(next));
 }
+
+/** カスタム単元をすべて削除する（配布用）。削除した件数を返す */
+export function clearAllCustomTemplates(): number {
+  const list = loadCustomTemplates();
+  const count = list.length;
+  localStorage.setItem(STORAGE_KEY_CUSTOM_TEMPLATES, '[]');
+  return count;
+}

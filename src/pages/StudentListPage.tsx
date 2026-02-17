@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loadStudentIds, loadStudent, addStudent, resetAllUnderstanding, removeStudentsExceptDemo } from '../lib/storage';
-import { getUnitTemplate } from '../data/unitRegistry';
+import { loadStudentIds, loadStudent, addStudent, saveStudent, resetAllUnderstanding, removeStudentsExceptDemo, DEMO_STUDENT_ID } from '../lib/storage';
+import { clearAllCustomTemplates } from '../lib/templateStorage';
+import { getUnitTemplate, getBuiltInUnitIds } from '../data/unitRegistry';
 
 const DEFAULT_UNIT_ID = 'quadratic_function';
 
@@ -22,13 +23,25 @@ export function StudentListPage() {
   }, [studentIds]);
 
   const handleResetUnderstanding = () => {
-    if (!window.confirm('全生徒の理解度を初期化し、デモ生徒以外の生徒を削除します。配布用にクリーンな状態になります。よろしいですか？')) return;
+    if (!window.confirm('全生徒の理解度を初期化し、デモ生徒以外の生徒とカスタム単元を削除します。配布用にクリーンな状態になります。よろしいですか？')) return;
     resetAllUnderstanding();
     const removed = removeStudentsExceptDemo();
+    const customRemoved = clearAllCustomTemplates();
+    // デモ生徒の進捗から削除したカスタム単元を除去
+    const builtInIds = new Set(getBuiltInUnitIds());
+    const demo = loadStudent(DEMO_STUDENT_ID);
+    if (demo?.nodeStatusByUnit) {
+      const filtered: typeof demo.nodeStatusByUnit = {};
+      for (const [unitId, status] of Object.entries(demo.nodeStatusByUnit)) {
+        if (builtInIds.has(unitId)) filtered[unitId] = status;
+      }
+      saveStudent({ ...demo, nodeStatusByUnit: filtered });
+    }
     setStudentIds(loadStudentIds());
-    setResetMessage(removed > 0
-      ? `理解度を初期化し、デモ生徒以外の ${removed} 名を削除しました。`
-      : '理解度を初期化しました。（デモ生徒のみのため削除はありません）');
+    const parts: string[] = ['理解度を初期化しました。'];
+    if (removed > 0) parts.push(`デモ生徒以外 ${removed} 名を削除`);
+    if (customRemoved > 0) parts.push(`カスタム単元 ${customRemoved} 件を削除`);
+    setResetMessage(parts.join('。'));
     setTimeout(() => setResetMessage(null), 5000);
   };
 
