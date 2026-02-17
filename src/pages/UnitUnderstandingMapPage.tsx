@@ -142,6 +142,8 @@ export function UnitUnderstandingMapPage() {
     [grouped, getUnderstanding]
   );
 
+  const [highlightedNodeId, setHighlightedNodeId] = useState<string | null>(null);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(flowEdges);
 
@@ -149,6 +151,35 @@ export function UnitUnderstandingMapPage() {
     setNodes(flowNodes);
     setEdges(flowEdges);
   }, [flowNodes, flowEdges, setNodes, setEdges]);
+
+  /**
+   * ホバー中のノードに接続している辺を強調する。
+   * 強調条件: 辺の source または target が、ホバー中のノード id と一致するとき。
+   * 一致しない辺（他ノード同士を結ぶ辺）は薄くする。
+   * ※ source/target は文字列に正規化して比較（型違いで一致しないことを防ぐ）。
+   */
+  useEffect(() => {
+    if (!highlightedNodeId) {
+      setEdges((prev) =>
+        prev.map((e) => ({ ...e, style: undefined, animated: false }))
+      );
+      return;
+    }
+    const hid = String(highlightedNodeId);
+    setEdges((prev) =>
+      prev.map((e) => {
+        const connected =
+          String(e.source) === hid || String(e.target) === hid;
+        return {
+          ...e,
+          style: connected
+            ? { stroke: '#0d6efd', strokeWidth: 3 }
+            : { opacity: 0.2 },
+          animated: connected,
+        };
+      })
+    );
+  }, [highlightedNodeId, setEdges]);
 
   const onNodesChangeHandler: OnNodesChange = useCallback((changes) => onNodesChange(changes), [onNodesChange]);
   const onEdgesChangeHandler: OnEdgesChange = useCallback((changes) => onEdgesChange(changes), [onEdgesChange]);
@@ -167,6 +198,14 @@ export function UnitUnderstandingMapPage() {
     },
     [goToUnit]
   );
+
+  const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
+    setHighlightedNodeId(node.id);
+  }, []);
+
+  const onNodeMouseLeave = useCallback(() => {
+    setHighlightedNodeId(null);
+  }, []);
 
   const onPaneClick = useCallback(() => {}, []);
 
@@ -238,6 +277,8 @@ export function UnitUnderstandingMapPage() {
                 onNodesChange={onNodesChangeHandler}
                 onEdgesChange={onEdgesChangeHandler}
                 onNodeClick={onNodeClick}
+                onNodeMouseEnter={onNodeMouseEnter}
+                onNodeMouseLeave={onNodeMouseLeave}
                 onPaneClick={onPaneClick}
                 fitView
               >
