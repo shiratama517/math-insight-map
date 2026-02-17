@@ -1,15 +1,16 @@
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loadStudentIds, loadStudent, addStudent } from '../lib/storage';
+import { loadStudentIds, loadStudent, addStudent, resetAllUnderstanding, removeStudentsExceptDemo } from '../lib/storage';
 import { getUnitTemplate } from '../data/unitRegistry';
 
 const DEFAULT_UNIT_ID = 'quadratic_function';
 
 export function StudentListPage() {
   const navigate = useNavigate();
-  const [studentIds] = useState(() => loadStudentIds());
+  const [studentIds, setStudentIds] = useState(() => loadStudentIds());
   const [newName, setNewName] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [resetMessage, setResetMessage] = useState<string | null>(null);
 
   const students = useMemo(() => {
     const rows: Array<{ id: string; name: string; grade?: string }> = [];
@@ -19,6 +20,17 @@ export function StudentListPage() {
     }
     return rows;
   }, [studentIds]);
+
+  const handleResetUnderstanding = () => {
+    if (!window.confirm('全生徒の理解度を初期化し、デモ生徒以外の生徒を削除します。配布用にクリーンな状態になります。よろしいですか？')) return;
+    resetAllUnderstanding();
+    const removed = removeStudentsExceptDemo();
+    setStudentIds(loadStudentIds());
+    setResetMessage(removed > 0
+      ? `理解度を初期化し、デモ生徒以外の ${removed} 名を削除しました。`
+      : '理解度を初期化しました。（デモ生徒のみのため削除はありません）');
+    setTimeout(() => setResetMessage(null), 5000);
+  };
 
   const handleAddStudent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +56,17 @@ export function StudentListPage() {
           <span style={{ margin: '0 0.5rem' }}>|</span>
           <Link to="/templates" className="back-link">単元テンプレート</Link>
         </p>
+        <div className="header-actions">
+          <button
+            type="button"
+            className="btn-reset-understanding"
+            onClick={handleResetUnderstanding}
+            title="配布前に全生徒の理解度を未学習に戻します"
+          >
+            理解度を初期化（配布用）
+          </button>
+          {resetMessage && <span className="reset-message" role="status">{resetMessage}</span>}
+        </div>
       </header>
       <main className="list-main">
         <ul className="student-list" aria-label="生徒一覧">

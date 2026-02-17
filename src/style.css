@@ -58,6 +58,32 @@ body {
   cursor: pointer;
 }
 
+.header .header-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header .btn-reset-understanding {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  background: #34495e;
+  color: #ecf0f1;
+  border: 1px solid #4a6a8a;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.header .btn-reset-understanding:hover {
+  background: #3d566e;
+}
+
+.header .reset-message {
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
+
 .main-layout {
   display: flex;
   flex: 1;
