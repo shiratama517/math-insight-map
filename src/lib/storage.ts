@@ -1,6 +1,42 @@
 import type { Student, StudentNodeStatus } from '../data/types';
 
 const STORAGE_KEY_PREFIX = 'math-insight-map-student-';
+const STORAGE_KEY_STUDENT_IDS = 'math-insight-map-student-ids';
+
+/** 登録されている生徒ID一覧を取得。未設定の場合は従来のデモ生徒1件でマイグレーション */
+export function loadStudentIds(): string[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_STUDENT_IDS);
+    if (!raw) return ['student-demo'];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.every((x) => typeof x === 'string')) {
+      return parsed.length > 0 ? parsed : ['student-demo'];
+    }
+    return ['student-demo'];
+  } catch {
+    return ['student-demo'];
+  }
+}
+
+export function saveStudentIds(ids: string[]): void {
+  localStorage.setItem(STORAGE_KEY_STUDENT_IDS, JSON.stringify(ids));
+}
+
+/** 新規生徒を追加して保存し、ID一覧に登録して返す */
+export function addStudent(
+  studentId: string,
+  name: string,
+  unitId: string,
+  nodeIds: string[]
+): Student {
+  const student = createInitialStudent(studentId, name, unitId, nodeIds);
+  saveStudent(student);
+  const ids = loadStudentIds();
+  if (!ids.includes(studentId)) {
+    saveStudentIds([...ids, studentId]);
+  }
+  return student;
+}
 
 /** 従来の nodeStatus のみのデータを nodeStatusByUnit にマイグレーションする */
 function migrateStudent(raw: Record<string, unknown>): Student {

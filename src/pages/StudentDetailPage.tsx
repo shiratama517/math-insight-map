@@ -1,17 +1,13 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import type { UnitTemplate, NodeTemplate, UnderstandingLevel } from '../data/types';
 import { AVAILABLE_UNITS, getUnitTemplate } from '../data/unitRegistry';
 import { buildFlowGraph } from '../utils/graphBuilder';
-import {
-  loadStudent,
-  saveStudent,
-  createInitialStudent,
-  ensureUnitStatus,
-} from '../lib/storage';
+import { getBottleneckNodeIds } from '../utils/bottleneck';
+import { getRecommendedPrerequisites } from '../utils/guidance';
+import { loadStudent, saveStudent, ensureUnitStatus } from '../lib/storage';
 import { GraphView } from '../components/GraphView';
 import { NodeDetailPanel } from '../components/NodeDetailPanel';
-
-const STUDENT_ID = 'student-demo';
 
 function getLevel(
   nodeStatus: Record<string, { understanding_level: UnderstandingLevel }>,
@@ -28,12 +24,16 @@ function getUnitIdFromSearch(): string {
 }
 
 export function StudentDetailPage() {
+  const { id } = useParams<{ id: string }>();
   const [unitId, setUnitId] = useState(getUnitIdFromSearch);
   const [unit, setUnit] = useState<UnitTemplate | null>(null);
-  const [student, setStudent] = useState<ReturnType<typeof loadStudent>>(() =>
-    loadStudent(STUDENT_ID)
-  );
+  const [student, setStudent] = useState<ReturnType<typeof loadStudent>>(null);
   const [selectedNode, setSelectedNode] = useState<NodeTemplate | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    setStudent(loadStudent(id));
+  }, [id]);
 
   useEffect(() => {
     getUnitTemplate(unitId).then((template) => {
@@ -42,17 +42,11 @@ export function StudentDetailPage() {
   }, [unitId]);
 
   useEffect(() => {
-    if (!unit) return;
+    if (!unit || !student) return;
     const nodeIds = unit.nodes.map((n) => n.id);
-    if (!student) {
-      setStudent(
-        createInitialStudent(STUDENT_ID, 'デモ生徒', unitId, nodeIds)
-      );
-      return;
-    }
     const next = ensureUnitStatus(student, unitId, nodeIds);
     if (next !== student) setStudent(next);
-  }, [unit, unitId]); // eslint-disable-line react-hooks/exhaustive-deps -- student の初期化は unit 到着時のみ
+  }, [unit, unitId, student]);
 
   const unitStatus = student?.nodeStatusByUnit[unitId];
   const getLevelForNode = useCallback(
@@ -61,18 +55,29 @@ export function StudentDetailPage() {
     [unitStatus]
   );
 
+  const bottleneckNodeIds = useMemo(() => {
+    if (!unit) return [];
+    return getBottleneckNodeIds(unit.nodes, getLevelForNode);
+  }, [unit, getLevelForNode]);
+
   const { flowNodes, flowEdges } = useMemo(() => {
     if (!unit) return { flowNodes: [], flowEdges: [] };
     return buildFlowGraph({
       nodes: unit.nodes,
       getLevel: getLevelForNode,
+      bottleneckNodeIds,
     });
-  }, [unit, getLevelForNode]);
+  }, [unit, getLevelForNode, bottleneckNodeIds]);
 
   const selectedStatus = selectedNode && unitStatus?.[selectedNode.id];
   const selectedLevel = selectedNode ? getLevelForNode(selectedNode.id) : 0;
   const selectedMemo = selectedStatus?.memo ?? '';
   const selectedLastChecked = selectedStatus?.last_checked;
+
+  const recommendedPrerequisites = useMemo(() => {
+    if (!selectedNode || !unit) return [];
+    return getRecommendedPrerequisites(selectedNode, unit.nodes, getLevelForNode);
+  }, [selectedNode, unit, getLevelForNode]);
 
   const handleLevelChange = useCallback(
     (nodeId: string, level: UnderstandingLevel) => {
@@ -140,7 +145,33 @@ export function StudentDetailPage() {
     window.history.replaceState({}, '', url.toString());
   }, []);
 
-  if (!unit || !student) {
+  if (!id) {
+    return (
+      <div className="student-detail">
+        <header className="header">
+          <h1>Math Insight Map</h1>
+          <p className="subtitle"><Link to="/" className="back-link">← 生徒一覧</Link></p>
+        </header>
+      </div>
+    );
+  }
+
+  if (!student) {
+    return (
+      <div className="student-detail">
+        <header className="header">
+          <h1>Math Insight Map</h1>
+          <p className="subtitle">生徒が見つかりません</p>
+        </header>
+        <main className="list-main">
+          <p>指定された生徒IDは存在しません。</p>
+          <Link to="/" className="student-link" style={{ display: 'inline-block', marginTop: '1rem' }}>生徒一覧へ</Link>
+        </main>
+      </div>
+    );
+  }
+
+  if (!unit) {
     return (
       <div className="student-detail">
         <header className="header">
@@ -156,6 +187,8 @@ export function StudentDetailPage() {
       <header className="header">
         <h1>Math Insight Map</h1>
         <p className="subtitle">
+          <Link to="/" className="back-link">← 生徒一覧</Link>
+          <br />
           生徒: {student.name} / 単元:{' '}
           <select
             className="unit-select"
@@ -170,6 +203,15 @@ export function StudentDetailPage() {
             ))}
           </select>
         </p>
+        {bottleneckNodeIds.length > 0 && (
+          <p className="bottleneck-list">
+            ボトルネック:{' '}
+            {bottleneckNodeIds.map((nodeId) => {
+              const node = unit.nodes.find((n) => n.id === nodeId);
+              return node ? <span key={nodeId}>{node.title}</span> : null;
+            })}
+          </p>
+        )}
       </header>
       <div className="main-layout">
         <div className="graph-area">
@@ -185,6 +227,7 @@ export function StudentDetailPage() {
             level={selectedLevel}
             memo={selectedMemo}
             lastChecked={selectedLastChecked}
+            recommendedPrerequisites={recommendedPrerequisites}
             onLevelChange={(level) =>
               selectedNode && handleLevelChange(selectedNode.id, level)
             }

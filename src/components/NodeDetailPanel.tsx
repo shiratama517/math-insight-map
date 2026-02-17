@@ -9,11 +9,20 @@ const LEVEL_LABELS: Record<UnderstandingLevel, string> = {
   4: '説明できる',
 };
 
+/** 指導提案で表示する前提ノード（この順で確認するとよい） */
+export interface RecommendedPrereq {
+  id: string;
+  title: string;
+  level: number;
+}
+
 interface NodeDetailPanelProps {
   node: NodeTemplate | null;
   level: UnderstandingLevel;
   memo: string;
   lastChecked: string | undefined;
+  /** 選択ノードの前提のうち理解度が低いもの（指導提案） */
+  recommendedPrerequisites?: RecommendedPrereq[];
   onLevelChange: (level: UnderstandingLevel) => void;
   onMemoChange: (memo: string) => void;
 }
@@ -23,6 +32,7 @@ export function NodeDetailPanel({
   level,
   memo,
   lastChecked,
+  recommendedPrerequisites = [],
   onLevelChange,
   onMemoChange,
 }: NodeDetailPanelProps) {
@@ -57,6 +67,18 @@ export function NodeDetailPanel({
         <div className="field">
           <label>最終確認日</label>
           <span>{lastChecked}</span>
+        </div>
+      )}
+      {recommendedPrerequisites.length > 0 && (
+        <div className="field guidance">
+          <label>指導提案（この順で確認するとよい）</label>
+          <ol className="guidance-list">
+            {recommendedPrerequisites.map((pr) => (
+              <li key={pr.id}>
+                {pr.title} <span className="guidance-level">（理解度: {pr.level}）</span>
+              </li>
+            ))}
+          </ol>
         </div>
       )}
       <div className="field">

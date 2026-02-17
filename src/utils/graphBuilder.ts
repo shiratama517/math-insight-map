@@ -5,16 +5,21 @@ import { levelToColor } from './colorMapper';
 export interface GraphBuilderInput {
   nodes: NodeTemplate[];
   getLevel: (nodeId: string) => number;
+  /** ボトルネックとしてハイライトするノード ID 一覧（省略可） */
+  bottleneckNodeIds?: string[];
 }
 
 /** テンプレートと理解度から React Flow の nodes / edges を生成する */
 export function buildFlowGraph({
   nodes,
   getLevel,
+  bottleneckNodeIds = [],
 }: GraphBuilderInput): { flowNodes: Node[]; flowEdges: Edge[] } {
+  const bottleneckSet = new Set(bottleneckNodeIds);
   const flowNodes: Node[] = nodes.map((n, i) => {
     const level = getLevel(n.id);
     const color = levelToColor(level as 0 | 1 | 2 | 3 | 4);
+    const isBottleneck = bottleneckSet.has(n.id);
     return {
       id: n.id,
       type: 'default',
@@ -23,12 +28,13 @@ export function buildFlowGraph({
         label: n.title,
         level,
         color,
+        bottleneck: isBottleneck,
         ...n,
       },
       style: {
         background: color,
         color: level <= 2 ? '#1a1a1a' : '#fff',
-        border: '1px solid #333',
+        border: isBottleneck ? '3px solid #c0392b' : '1px solid #333',
         borderRadius: 8,
         padding: 8,
       },
