@@ -37,7 +37,11 @@ export function StudentListPage() {
     <div className="student-list-page">
       <header className="header">
         <h1>Math Insight Map</h1>
-        <p className="subtitle">生徒一覧</p>
+        <p className="subtitle">
+          生徒一覧
+          <span style={{ margin: '0 0.5rem' }}>|</span>
+          <Link to="/templates" className="back-link">単元テンプレート</Link>
+        </p>
       </header>
       <main className="list-main">
         <ul className="student-list" aria-label="生徒一覧">

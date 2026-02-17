@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { UnitTemplate, NodeTemplate, UnderstandingLevel } from '../data/types';
-import { AVAILABLE_UNITS, getUnitTemplate } from '../data/unitRegistry';
+import { getAvailableUnits, getUnitTemplate } from '../data/unitRegistry';
 import { buildFlowGraph } from '../utils/graphBuilder';
 import { getBottleneckNodeIds } from '../utils/bottleneck';
 import { getRecommendedPrerequisites } from '../utils/guidance';
@@ -19,7 +19,7 @@ function getLevel(
 function getUnitIdFromSearch(): string {
   const params = new URLSearchParams(window.location.search);
   const u = params.get('unit');
-  if (u && AVAILABLE_UNITS.some((meta) => meta.unit_id === u)) return u;
+  if (u && getAvailableUnits().some((meta) => meta.unit_id === u)) return u;
   return 'quadratic_function';
 }
 
@@ -196,7 +196,7 @@ export function StudentDetailPage() {
             onChange={(e) => handleUnitChange(e.target.value)}
             aria-label="単元を選択"
           >
-            {AVAILABLE_UNITS.map((meta) => (
+            {getAvailableUnits().map((meta) => (
               <option key={meta.unit_id} value={meta.unit_id}>
                 {meta.unit_name}（{meta.grade}）
               </option>
