@@ -531,6 +531,7 @@ body {
   font-weight: 500;
   flex: 1;
   min-width: 0;
+  color: #333;
 }
 
 .node-list-meta {
