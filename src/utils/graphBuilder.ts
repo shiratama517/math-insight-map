@@ -32,9 +32,15 @@ export function buildFlowGraph({
         ...n,
       },
       style: {
-        background: color,
+        ...(isBottleneck
+          ? {
+              backgroundImage: `linear-gradient(${color}, ${color}), repeating-linear-gradient(45deg, #ffeb3b 0, #ffeb3b 8px, #000 8px, #000 12px)`,
+              backgroundOrigin: 'padding-box, border-box',
+              backgroundClip: 'padding-box, border-box',
+            }
+          : { background: color }),
         color: level <= 2 ? '#1a1a1a' : '#fff',
-        border: isBottleneck ? '3px solid #c0392b' : '1px solid #333',
+        border: isBottleneck ? '3px solid transparent' : '1px solid #333',
         borderRadius: 8,
         padding: 8,
       },
