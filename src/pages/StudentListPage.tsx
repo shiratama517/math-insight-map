@@ -40,6 +40,8 @@ export function StudentListPage() {
         <p className="subtitle">
           生徒一覧
           <span style={{ margin: '0 0.5rem' }}>|</span>
+          <Link to="/unit-map" className="back-link">単元マップ</Link>
+          <span style={{ margin: '0 0.5rem' }}>|</span>
           <Link to="/templates" className="back-link">単元テンプレート</Link>
         </p>
       </header>

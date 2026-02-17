@@ -1,15 +1,20 @@
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAvailableUnits } from '../data/unitRegistry';
+import { getAvailableUnitsGroupedBySubject, getBuiltInUnitIds } from '../data/unitRegistry';
 import { loadCustomTemplates } from '../lib/templateStorage';
-
-const BUILT_IN_IDS = ['quadratic_function', 'square_root', 'trigonometric_ratio'];
 
 export function TemplateListPage() {
   const navigate = useNavigate();
-  const builtIn = useMemo(
-    () => getAvailableUnits().filter((u) => BUILT_IN_IDS.includes(u.unit_id)),
-    []
+  const builtInIds = useMemo(() => new Set(getBuiltInUnitIds()), []);
+  const builtInGrouped = useMemo(
+    () =>
+      getAvailableUnitsGroupedBySubject().filter((g) =>
+        g.units.some((u) => builtInIds.has(u.unit_id))
+      ).map((g) => ({
+        ...g,
+        units: g.units.filter((u) => builtInIds.has(u.unit_id)),
+      })),
+    [builtInIds]
   );
   const custom = useMemo(() => loadCustomTemplates(), []);
 
@@ -27,28 +32,33 @@ export function TemplateListPage() {
         <section className="template-section">
           <h2>組み込み単元</h2>
           <p className="section-desc">編集するには「コピーして編集」でコピーを作成してください。</p>
-          <ul className="template-list" aria-label="組み込みテンプレート一覧">
-            {builtIn.map((u) => (
-              <li key={u.unit_id} className="template-item">
-                <span className="template-name">{u.unit_name}</span>
-                <span className="template-meta">（{u.grade}）</span>
-                <div className="template-actions">
-                  <Link
-                    to={`/templates/new?copy=${u.unit_id}`}
-                    className="btn-link"
-                  >
-                    コピーして編集
-                  </Link>
-                  <Link
-                    to={`/templates/export/${u.unit_id}`}
-                    className="btn-link btn-export"
-                  >
-                    JSONエクスポート
-                  </Link>
-                </div>
-              </li>
-            ))}
-          </ul>
+          {builtInGrouped.map((group) => (
+            <div key={group.subject_name} className="template-group" style={{ marginBottom: '1rem' }}>
+              <h3 className="template-group-title" style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>{group.subject_name}</h3>
+              <ul className="template-list" aria-label={`${group.subject_name} テンプレート一覧`}>
+                {group.units.map((u) => (
+                  <li key={u.unit_id} className="template-item">
+                    <span className="template-name">{u.unit_name}</span>
+                    <span className="template-meta">（{u.grade}）</span>
+                    <div className="template-actions">
+                      <Link
+                        to={`/templates/new?copy=${u.unit_id}`}
+                        className="btn-link"
+                      >
+                        コピーして編集
+                      </Link>
+                      <Link
+                        to={`/templates/export/${u.unit_id}`}
+                        className="btn-link btn-export"
+                      >
+                        JSONエクスポート
+                      </Link>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </section>
         <section className="template-section">
           <h2>カスタム単元</h2>

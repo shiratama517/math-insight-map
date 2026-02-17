@@ -1,0 +1,82 @@
+{
+  "subjects": [
+    {
+      "subject_id": "math1",
+      "subject_name": "数学Ⅰ",
+      "credits": 3,
+      "order": 1,
+      "units": [
+        { "order": 1, "unit_name": "数と式", "unit_id": "number_and_expression" },
+        { "order": 2, "unit_name": "図形と計量", "unit_id": "trigonometric_ratio" },
+        { "order": 3, "unit_name": "二次関数", "unit_id": "quadratic_function" },
+        { "order": 4, "unit_name": "データの分析", "unit_id": "data_analysis" }
+      ]
+    },
+    {
+      "subject_id": "math2",
+      "subject_name": "数学Ⅱ",
+      "credits": 4,
+      "order": 2,
+      "units": [
+        { "order": 1, "unit_name": "いろいろな式", "unit_id": null },
+        { "order": 2, "unit_name": "図形と方程式", "unit_id": null },
+        { "order": 3, "unit_name": "指数関数・対数関数", "unit_id": null },
+        { "order": 4, "unit_name": "三角関数", "unit_id": null },
+        { "order": 5, "unit_name": "微分・積分の考え", "unit_id": null }
+      ]
+    },
+    {
+      "subject_id": "math3",
+      "subject_name": "数学Ⅲ",
+      "credits": 3,
+      "order": 3,
+      "units": [
+        { "order": 1, "unit_name": "極限", "unit_id": null },
+        { "order": 2, "unit_name": "微分法", "unit_id": null },
+        { "order": 3, "unit_name": "積分法", "unit_id": null }
+      ]
+    },
+    {
+      "subject_id": "math_a",
+      "subject_name": "数学A",
+      "credits": 2,
+      "order": 4,
+      "units": [
+        { "order": 1, "unit_name": "図形の性質", "unit_id": null },
+        { "order": 2, "unit_name": "場合の数と確率", "unit_id": null },
+        { "order": 3, "unit_name": "数学と人間の活動", "unit_id": null }
+      ]
+    },
+    {
+      "subject_id": "math_b",
+      "subject_name": "数学B",
+      "credits": 2,
+      "order": 5,
+      "units": [
+        { "order": 1, "unit_name": "数列", "unit_id": null },
+        { "order": 2, "unit_name": "統計的な推測", "unit_id": null },
+        { "order": 3, "unit_name": "数学と社会生活", "unit_id": null }
+      ]
+    },
+    {
+      "subject_id": "math_c",
+      "subject_name": "数学C",
+      "credits": 2,
+      "order": 6,
+      "units": [
+        { "order": 1, "unit_name": "ベクトル", "unit_id": null },
+        { "order": 2, "unit_name": "平面上の曲線と複素数平面", "unit_id": null },
+        { "order": 3, "unit_name": "数学的な表現の工夫", "unit_id": null }
+      ]
+    },
+    {
+      "subject_id": "jhs",
+      "subject_name": "中学校",
+      "credits": null,
+      "order": 0,
+      "units": [
+        { "order": 1, "unit_name": "平方根", "unit_id": "square_root" }
+      ]
+    }
+  ]
+}

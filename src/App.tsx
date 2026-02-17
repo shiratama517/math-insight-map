@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { StudentListPage } from './pages/StudentListPage';
 import { StudentDetailPage } from './pages/StudentDetailPage';
+import { UnitMapPage } from './pages/UnitMapPage';
 import { TemplateListPage } from './pages/TemplateListPage';
 import { TemplateEditPage } from './pages/TemplateEditPage';
 import { ExportTemplatePage } from './pages/ExportTemplatePage';
@@ -12,6 +13,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<StudentListPage />} />
       <Route path="/student/:id" element={<StudentDetailPage />} />
+      <Route path="/unit-map" element={<UnitMapPage />} />
       <Route path="/templates" element={<TemplateListPage />} />
       <Route path="/templates/new" element={<TemplateEditPage />} />
       <Route path="/templates/edit/:unitId" element={<TemplateEditPage />} />

@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { UnitTemplate, NodeTemplate, UnderstandingLevel } from '../data/types';
-import { getAvailableUnits, getUnitTemplate } from '../data/unitRegistry';
+import { getAvailableUnitsGroupedBySubject, getUnitTemplate } from '../data/unitRegistry';
 import { buildFlowGraph } from '../utils/graphBuilder';
 import { getBottleneckNodeIds } from '../utils/bottleneck';
 import { getRecommendedPrerequisites } from '../utils/guidance';
@@ -19,7 +19,8 @@ function getLevel(
 function getUnitIdFromSearch(): string {
   const params = new URLSearchParams(window.location.search);
   const u = params.get('unit');
-  if (u && getAvailableUnits().some((meta) => meta.unit_id === u)) return u;
+  const groups = getAvailableUnitsGroupedBySubject();
+  if (u && groups.some((g) => g.units.some((meta) => meta.unit_id === u))) return u;
   return 'quadratic_function';
 }
 
@@ -188,6 +189,8 @@ export function StudentDetailPage() {
         <h1>Math Insight Map</h1>
         <p className="subtitle">
           <Link to="/" className="back-link">← 生徒一覧</Link>
+          <span style={{ margin: '0 0.5rem' }}>|</span>
+          <Link to={`/unit-map?student=${id}`} className="back-link">単元マップ</Link>
           <br />
           生徒: {student.name} / 単元:{' '}
           <select
@@ -196,10 +199,14 @@ export function StudentDetailPage() {
             onChange={(e) => handleUnitChange(e.target.value)}
             aria-label="単元を選択"
           >
-            {getAvailableUnits().map((meta) => (
-              <option key={meta.unit_id} value={meta.unit_id}>
-                {meta.unit_name}（{meta.grade}）
-              </option>
+            {getAvailableUnitsGroupedBySubject().map((group) => (
+              <optgroup key={group.subject_name} label={group.subject_name}>
+                {group.units.map((meta) => (
+                  <option key={meta.unit_id} value={meta.unit_id}>
+                    {meta.unit_name}（{meta.grade}）
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </p>

@@ -316,5 +316,7 @@
 | 数学Ⅰ（3）二次関数 | quadratic_function      | 実装済み |
 | 数学Ⅰ（2）図形と計量（三角比） | trigonometric_ratio | 実装済み |
 | 中学3年 平方根     | square_root             | 実装済み（高校ではない） |
+| 数学Ⅰ（1）数と式   | number_and_expression   | 実装済み |
+| 数学Ⅰ（4）データの分析 | data_analysis       | 実装済み |
 
 上記以外の単元は、この参照に基づいて `src/data/templates/*.json` と `unitRegistry.ts` に順次追加できる。

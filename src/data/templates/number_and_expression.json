@@ -1,0 +1,71 @@
+{
+  "unit_id": "number_and_expression",
+  "unit_name": "数と式",
+  "grade": "高校1年",
+  "description": "実数・無理数、集合と命題、式の展開と因数分解、一次不等式までの理解構造（数学Ⅰ）",
+  "nodes": [
+    {
+      "id": "NE-01",
+      "title": "実数と無理数",
+      "description": "数を実数まで拡張する意義を理解し、簡単な無理数の四則計算ができる",
+      "category": "definition",
+      "difficulty": 1,
+      "prerequisites": [],
+      "tags": ["real_number", "irrational"]
+    },
+    {
+      "id": "NE-02",
+      "title": "集合と命題の基本",
+      "description": "集合と命題に関する基本的な概念を理解する",
+      "category": "definition",
+      "difficulty": 2,
+      "prerequisites": [],
+      "tags": ["set", "proposition"]
+    },
+    {
+      "id": "NE-03",
+      "title": "式の展開（乗法公式）",
+      "description": "二次の乗法公式を理解し、式の展開ができる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["NE-01"],
+      "tags": ["expansion", "formula"]
+    },
+    {
+      "id": "NE-04",
+      "title": "因数分解",
+      "description": "因数分解の公式を理解し、二次式の因数分解ができる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["NE-03"],
+      "tags": ["factorization"]
+    },
+    {
+      "id": "NE-05",
+      "title": "不等式の性質と一次不等式",
+      "description": "不等式の解の意味や性質を理解し、一次不等式の解を求めることができる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["NE-01"],
+      "tags": ["inequality", "linear"]
+    },
+    {
+      "id": "NE-06",
+      "title": "命題の証明",
+      "description": "集合の考えを用いて論理的に考察し、簡単な命題を証明できる",
+      "category": "interpretation",
+      "difficulty": 3,
+      "prerequisites": ["NE-02"],
+      "tags": ["proof", "logic"]
+    },
+    {
+      "id": "NE-07",
+      "title": "式の変形と活用",
+      "description": "目的に応じて式を適切に変形し、問題解決に活用できる",
+      "category": "application",
+      "difficulty": 3,
+      "prerequisites": ["NE-03", "NE-04"],
+      "tags": ["transformation", "application"]
+    }
+  ]
+}

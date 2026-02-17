@@ -1,0 +1,80 @@
+{
+  "unit_id": "data_analysis",
+  "unit_name": "データの分析",
+  "grade": "高校1年",
+  "description": "データの散らばり（分散・標準偏差）、相関（散布図・相関係数）、仮説検定の考え方までの理解構造（数学Ⅰ）",
+  "nodes": [
+    {
+      "id": "DA-01",
+      "title": "データの整理と表・グラフ",
+      "description": "データを表やグラフに整理し、傾向を把握できる",
+      "category": "definition",
+      "difficulty": 1,
+      "prerequisites": [],
+      "tags": ["table", "graph", "organization"]
+    },
+    {
+      "id": "DA-02",
+      "title": "代表値（平均・中央値など）",
+      "description": "平均値や中央値などの代表値の意味を理解し、求められる",
+      "category": "operation",
+      "difficulty": 1,
+      "prerequisites": ["DA-01"],
+      "tags": ["mean", "median", "representative"]
+    },
+    {
+      "id": "DA-03",
+      "title": "分散の意味と計算",
+      "description": "分散の意味やその用い方を理解し、分散を求められる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["DA-02"],
+      "tags": ["variance", "spread"]
+    },
+    {
+      "id": "DA-04",
+      "title": "標準偏差の意味と計算",
+      "description": "標準偏差の意味を理解し、標準偏差を求められる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["DA-03"],
+      "tags": ["standard_deviation"]
+    },
+    {
+      "id": "DA-05",
+      "title": "散布図とデータの傾向",
+      "description": "散布図を読み、二つの変量の関係や傾向を把握できる",
+      "category": "interpretation",
+      "difficulty": 2,
+      "prerequisites": ["DA-01"],
+      "tags": ["scatter_plot", "relationship"]
+    },
+    {
+      "id": "DA-06",
+      "title": "相関係数の意味と計算",
+      "description": "相関係数の意味やその用い方を理解し、相関係数を求められる",
+      "category": "operation",
+      "difficulty": 3,
+      "prerequisites": ["DA-05", "DA-04"],
+      "tags": ["correlation", "coefficient"]
+    },
+    {
+      "id": "DA-07",
+      "title": "統計量とグラフの選択",
+      "description": "目的に応じて適切な統計量やグラフを選択して分析できる",
+      "category": "application",
+      "difficulty": 3,
+      "prerequisites": ["DA-04", "DA-06"],
+      "tags": ["selection", "analysis"]
+    },
+    {
+      "id": "DA-08",
+      "title": "仮説検定の考え方",
+      "description": "具体的な事象において仮説検定の考え方を理解する",
+      "category": "interpretation",
+      "difficulty": 4,
+      "prerequisites": ["DA-06"],
+      "tags": ["hypothesis_test", "inference"]
+    }
+  ]
+}
