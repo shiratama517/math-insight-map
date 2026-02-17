@@ -47,6 +47,17 @@ body {
   opacity: 0.9;
 }
 
+.header .unit-select {
+  margin-left: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.95rem;
+  background: #34495e;
+  color: #ecf0f1;
+  border: 1px solid #4a6a8a;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .main-layout {
   display: flex;
   flex: 1;

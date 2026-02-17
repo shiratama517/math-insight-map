@@ -1,0 +1,80 @@
+{
+  "unit_id": "square_root",
+  "unit_name": "平方根",
+  "grade": "中学3年",
+  "description": "平方根の定義から有理化・方程式・不等式までの理解構造",
+  "nodes": [
+    {
+      "id": "SR-01",
+      "title": "平方根の定義・根号の意味",
+      "description": "2乗して a になる数を a の平方根と理解し、√ の記号の意味を説明できる",
+      "category": "definition",
+      "difficulty": 1,
+      "prerequisites": [],
+      "tags": ["definition", "radical"]
+    },
+    {
+      "id": "SR-02",
+      "title": "平方根の値（有理数・無理数）",
+      "description": "平方根が有理数になる場合とならない場合を区別し、近似値を求められる",
+      "category": "interpretation",
+      "difficulty": 2,
+      "prerequisites": ["SR-01"],
+      "tags": ["value", "irrational"]
+    },
+    {
+      "id": "SR-03",
+      "title": "平方根の乗法・除法",
+      "description": "√a × √b = √(ab)、√a / √b = √(a/b) を理解し計算できる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["SR-01"],
+      "tags": ["multiplication", "division"]
+    },
+    {
+      "id": "SR-04",
+      "title": "有理化（分母の有理化）",
+      "description": "分母に根号を含む式を有理化できる",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["SR-03"],
+      "tags": ["rationalization"]
+    },
+    {
+      "id": "SR-05",
+      "title": "式の値・大小比較",
+      "description": "平方根を含む式の値を求め、2つの平方根の大小を比較できる",
+      "category": "operation",
+      "difficulty": 3,
+      "prerequisites": ["SR-02", "SR-03"],
+      "tags": ["evaluation", "comparison"]
+    },
+    {
+      "id": "SR-06",
+      "title": "平方根を含む方程式",
+      "description": "√ を含む方程式を解ける",
+      "category": "application",
+      "difficulty": 3,
+      "prerequisites": ["SR-03", "SR-05"],
+      "tags": ["equation"]
+    },
+    {
+      "id": "SR-07",
+      "title": "平方根を含む不等式",
+      "description": "√ を含む不等式を解ける",
+      "category": "application",
+      "difficulty": 4,
+      "prerequisites": ["SR-06"],
+      "tags": ["inequality"]
+    },
+    {
+      "id": "SR-08",
+      "title": "応用（長さ・面積など）",
+      "description": "図形の長さ・面積などに平方根を適用できる",
+      "category": "application",
+      "difficulty": 4,
+      "prerequisites": ["SR-05"],
+      "tags": ["geometry", "word_problem"]
+    }
+  ]
+}

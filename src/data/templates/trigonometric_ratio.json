@@ -1,0 +1,71 @@
+{
+  "unit_id": "trigonometric_ratio",
+  "unit_name": "三角比",
+  "grade": "高校1年",
+  "description": "三角比の定義から正弦・余弦定理、三角形への応用までの理解構造",
+  "nodes": [
+    {
+      "id": "TR-01",
+      "title": "三角比の定義（sin, cos, tan）",
+      "description": "直角三角形の辺の比として sin, cos, tan を定義し、求められる",
+      "category": "definition",
+      "difficulty": 1,
+      "prerequisites": [],
+      "tags": ["definition", "sin", "cos", "tan"]
+    },
+    {
+      "id": "TR-02",
+      "title": "相互関係（sin²θ + cos²θ = 1 など）",
+      "description": "三角比の相互関係を理解し、1つの比から他を求められる",
+      "category": "interpretation",
+      "difficulty": 2,
+      "prerequisites": ["TR-01"],
+      "tags": ["identity", "relationship"]
+    },
+    {
+      "id": "TR-03",
+      "title": "特別な角（30°, 45°, 60°）",
+      "description": "30°, 45°, 60° の三角比の値を覚え、計算に使える",
+      "category": "operation",
+      "difficulty": 2,
+      "prerequisites": ["TR-01"],
+      "tags": ["special_angles"]
+    },
+    {
+      "id": "TR-04",
+      "title": "正弦定理",
+      "description": "正弦定理を理解し、三角形の辺や角を求められる",
+      "category": "operation",
+      "difficulty": 3,
+      "prerequisites": ["TR-01"],
+      "tags": ["sine_theorem"]
+    },
+    {
+      "id": "TR-05",
+      "title": "余弦定理",
+      "description": "余弦定理を理解し、三角形の辺や角を求められる",
+      "category": "operation",
+      "difficulty": 3,
+      "prerequisites": ["TR-01"],
+      "tags": ["cosine_theorem"]
+    },
+    {
+      "id": "TR-06",
+      "title": "三角形への応用（面積・辺・角）",
+      "description": "正弦・余弦定理や面積公式を使って、三角形の辺・角・面積を求めることができる",
+      "category": "application",
+      "difficulty": 4,
+      "prerequisites": ["TR-04", "TR-05"],
+      "tags": ["triangle", "area"]
+    },
+    {
+      "id": "TR-07",
+      "title": "測量など応用",
+      "description": "高さや距離の測定など、実問題に三角比を適用できる",
+      "category": "application",
+      "difficulty": 4,
+      "prerequisites": ["TR-06"],
+      "tags": ["measurement", "word_problem"]
+    }
+  ]
+}

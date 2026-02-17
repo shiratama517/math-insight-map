@@ -26,10 +26,14 @@ export interface StudentNodeStatus {
   memo?: string;
 }
 
+/** 単元ごとのノード理解状況 */
+export type NodeStatusByUnit = Record<string, Record<string, StudentNodeStatus>>;
+
 export interface Student {
   student_id: string;
   name: string;
   grade?: string;
   school_type?: string;
-  nodeStatus: Record<string, StudentNodeStatus>;
+  /** 単元ごとの進捗。従来の nodeStatus は読み込み時に quadratic_function としてマイグレーションされる */
+  nodeStatusByUnit: NodeStatusByUnit;
 }
