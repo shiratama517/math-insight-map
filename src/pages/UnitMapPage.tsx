@@ -54,7 +54,7 @@ export function UnitMapPage() {
           </select>
           {hasStudent && (
             <Link to={`/unit-map/understanding?student=${selectedStudentId}`} className="btn-link" style={{ marginLeft: 'auto' }}>
-              単元ごとの理解度マップ
+              単元間の理解度マップ
             </Link>
           )}
         </div>

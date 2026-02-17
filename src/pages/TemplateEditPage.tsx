@@ -360,7 +360,7 @@ export function TemplateEditPage() {
             <div className="form-row">
               <label>前提単元（理解度マップの矢印）</label>
               <p className="form-hint" style={{ fontSize: '0.85rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>
-                この単元の前提とする単元を選ぶと、単元ごとの理解度マップで矢印が表示されます。
+                この単元の前提とする単元を選ぶと、単元間の理解度マップで矢印が表示されます。
               </p>
               <PrerequisiteUnitsSelect
                 currentUnitId={unit.unit_id}

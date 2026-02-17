@@ -214,11 +214,11 @@ export function UnitUnderstandingMapPage() {
             <span style={{ margin: '0 0.5rem' }}>|</span>
             <Link to="/unit-map" className="back-link">単元マップ</Link>
             <span style={{ margin: '0 0.5rem' }}>|</span>
-            <span>単元ごとの理解度マップ</span>
+            <span>単元間の理解度マップ</span>
           </p>
         </header>
         <main className="list-main" style={{ maxWidth: '40rem' }}>
-          <p className="section-desc">生徒を選択してから単元マップで「単元ごとの理解度マップ」を開いてください。</p>
+          <p className="section-desc">生徒を選択してから単元マップで「単元間の理解度マップ」を開いてください。</p>
           <p>
             <Link to="/unit-map" className="btn-link">単元マップへ</Link>
           </p>
@@ -235,7 +235,7 @@ export function UnitUnderstandingMapPage() {
           <p className="subtitle">
             <Link to="/unit-map" className="back-link">← 単元マップ</Link>
             <span style={{ margin: '0 0.5rem' }}>|</span>
-            <span>単元ごとの理解度マップ</span>
+            <span>単元間の理解度マップ</span>
           </p>
         </header>
         <main className="list-main" style={{ maxWidth: '40rem' }}>
@@ -257,7 +257,7 @@ export function UnitUnderstandingMapPage() {
           <span style={{ margin: '0 0.5rem' }}>|</span>
           <Link to={`/unit-map?student=${studentId}`} className="back-link">単元マップ</Link>
           <span style={{ margin: '0 0.5rem' }}>|</span>
-          <span>単元ごとの理解度マップ（{student.name}）</span>
+          <span>単元間の理解度マップ（{student.name}）</span>
         </p>
       </header>
       <main className="unit-understanding-main" style={{ height: 'calc(100vh - 120px)', minHeight: 400 }}>
