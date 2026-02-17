@@ -48,14 +48,16 @@ export function StudentListPage() {
   return (
     <div className="student-list-page">
       <header className="header">
-        <h1>Math Insight Map</h1>
-        <p className="subtitle">
-          生徒一覧
-          <span style={{ margin: '0 0.5rem' }}>|</span>
-          <Link to="/unit-map" className="back-link">単元マップ</Link>
-          <span style={{ margin: '0 0.5rem' }}>|</span>
-          <Link to="/templates" className="back-link">単元テンプレート</Link>
-        </p>
+        <div className="header-left">
+          <h1>Math Insight Map</h1>
+          <p className="subtitle">
+            生徒一覧
+            <span style={{ margin: '0 0.5rem' }}>|</span>
+            <Link to="/unit-map" className="back-link">単元マップ</Link>
+            <span style={{ margin: '0 0.5rem' }}>|</span>
+            <Link to="/templates" className="back-link">単元テンプレート</Link>
+          </p>
+        </div>
         <div className="header-actions">
           <button
             type="button"

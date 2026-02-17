@@ -36,6 +36,18 @@ body {
   color: #ecf0f1;
 }
 
+/* 生徒一覧ページ: ヘッダー右側にアクションを配置 */
+.student-list-page .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.student-list-page .header .header-left {
+  min-width: 0;
+}
+
 .header h1 {
   margin: 0 0 0.25rem 0;
   font-size: 1.5rem;
@@ -59,7 +71,7 @@ body {
 }
 
 .header .header-actions {
-  margin-top: 0.75rem;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 1rem;
